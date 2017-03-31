@@ -38,3 +38,6 @@ jspm_packages
 
 # idea config files
 .idea
+
+# mysql config
+conf/db.js
