@@ -41,3 +41,6 @@ jspm_packages
 
 # mysql config
 conf/db.js
+
+# test module
+test
