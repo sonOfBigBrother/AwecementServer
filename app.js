@@ -1,14 +1,14 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+import Express from 'express'
+import path from 'path'
+import favicon from 'serve-favicon'
+import logger from 'morgan'
+import cookieParser from 'cookie-parser'
+import bodyParser from 'body-parser'
+import config from 'config-lite'
+import router from './routes'
+import pkg from './package'
 
-var index = require('./routes/index');
-var users = require('./routes/users');
-
-var app = express();
+let app = Express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -20,14 +20,11 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
-
-app.use('/', index);
-app.use('/users', users);
+app.use(Express.static(path.join(__dirname, 'public')));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+  let err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
@@ -43,4 +40,14 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-module.exports = app;
+router(app);
+
+if (module.parent){
+  module.exports = app;
+} else {
+  //listen port,start app
+  app.listen(config.mysql.port, function () {
+    console.log(`${pkg.name} listening on port ${config.mysql.port}`);
+  });
+}
+
