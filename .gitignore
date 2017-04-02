@@ -1,7 +1,6 @@
 # Logs
 logs
 *.log
-npm-debug.log*
 
 # Runtime data
 pids
@@ -44,3 +43,5 @@ conf/db.js
 
 # test module
 test
+typings
+typings.json
