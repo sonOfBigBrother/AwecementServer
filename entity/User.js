@@ -2,7 +2,7 @@
  * Created by David Xie on 2017/4/2.
  * User entity
  */
-class User {
+export default class User {
   constructor(){
     this._id = null;
     this._delMark = 0;

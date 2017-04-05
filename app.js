@@ -1,18 +1,17 @@
-import Express from 'express'
+import express from 'express'
 import path from 'path'
 import favicon from 'serve-favicon'
 import logger from 'morgan'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
-import config from 'config-lite'
-import router from './routes'
-import pkg from './package'
-
-let app = Express();
+import routes from './routes'
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -20,7 +19,8 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(Express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
+routes(app);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -40,14 +40,7 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-router(app);
 
-if (module.parent){
-  module.exports = app;
-} else {
-  //listen port,start app
-  app.listen(config.mysql.port, function () {
-    console.log(`${pkg.name} listening on port ${config.mysql.port}`);
-  });
-}
 
+
+export default app;

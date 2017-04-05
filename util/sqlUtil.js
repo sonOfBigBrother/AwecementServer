@@ -1,14 +1,8 @@
 /**
  * Created by David Xie on 2017/3/31.
  */
+import mysql from 'mysql'
+import conf from '../conf/db'
 module.exports = {
-  extend: function(target, source, flag) {
-    for(var key in source) {
-      if(source.hasOwnProperty(key))
-        flag ?
-          (target[key] = source[key]) :
-          (target[key] === void 0 && (target[key] = source[key]));
-    }
-    return target;
-  }
+  pool:mysql.createPool(conf.mysql)
 };

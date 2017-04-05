@@ -1,10 +1,8 @@
-import express from 'express'
-
-let router = express.Router();
-
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
-
-module.exports = router;
+/* router setting */
+import login from './login'
+export default function (app) {
+  app.get('/',function (req, res) {
+    res.render('index')
+   });
+  app.use('/login',login);
+}

@@ -1,5 +1,15 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  h1 登录页面
+    form(method='post', action='/login')
+      div.form-row
+        label
+          span username:
+          input(type='text',name='username')
+      div.form-row
+        label
+          span password:
+          input(type='text',name='password')
+      div.form-row
+        input(type='submit')

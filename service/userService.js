@@ -1,13 +1,8 @@
 /**
  * Created by David Xie on 2017/3/31.
  */
-import mysql from 'mysql'
-import conf from '/conf/db'
-import sqlUtil from '/util/sqlUtil'
+import {pool} from '../util/sqlUtil'
 import userMapper from '../dao/userMapper'
-
-//use connection pool
-const pool = mysql.createPool(sqlUtil.extend({}, conf.mysql));
 
 //return data to the fond end
 const responseToFont = function (res, ret) {
@@ -21,16 +16,12 @@ const responseToFont = function (res, ret) {
   }
 };
 
-export const userDao = {
-  add(req, res, next) {
+export default {
+  addUser(user, res) {
     pool.getConnection(function (err, connection) {
-      //get parameter from font end
-      let param = req.query || req.params;
-
       //set up a connection
       //insert data
-      connection.query(userMapper.insert,
-        [1, param.username, param.password, param.roleId, param.fromWhere],
+      connection.query(userMapper.insert, user,
         function (err, result){
         if (result){
           result = {
@@ -44,5 +35,18 @@ export const userDao = {
         connection.release();
         });
     })
+  },
+  checkUser(req, res, next) {
+    let username = req.body.username;
+    let password = req.body.password;
+    pool.getConnection(function (err, connection) {
+      if (err) throw err;
+      connection.query(userMapper.queryByName, [username], function (error, results, fields) {
+        if (results[0].password === password){
+          res.render('home');
+        }
+      });
+      connection.release();
+    });
   }
 };
