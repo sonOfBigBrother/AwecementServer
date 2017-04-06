@@ -5,7 +5,12 @@ import logger from 'morgan'
 import cookieParser from 'cookie-parser'
 import bodyParser from 'body-parser'
 import routes from './routes'
+import session from 'express-session'
+import mongostore from 'connect-mongo'
+import db from './conf/db'
+
 const app = express();
+const MongoStore = mongostore(session);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -20,6 +25,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({
+  store:new MongoStore({
+    url: db.mongodb.url
+  }),
+  secret:'0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ',
+  resave:true,
+  saveUninitialized:true
+}));
 routes(app);
 
 // catch 404 and forward to error handler
