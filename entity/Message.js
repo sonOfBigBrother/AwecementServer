@@ -2,7 +2,7 @@
  * Created by David Xie on 2017/4/2.
  * Message entity
  */
-class Message {
+export default class Message {
   constructor() {
     this._id = null;
     this._title = null;

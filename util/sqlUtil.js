@@ -3,6 +3,6 @@
  */
 import mysql from 'mysql'
 import conf from '../conf/db'
-module.exports = {
-  pool:mysql.createPool(conf.mysql)
-};
+const pool = mysql.createPool(conf.mysql);
+
+export default pool;
