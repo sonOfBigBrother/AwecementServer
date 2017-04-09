@@ -1,20 +1,11 @@
 /**
  * Created by David Xie on 2017/3/31.
  */
-import {pool} from '../util/sqlUtil'
+import pool from '../util/sqlUtil'
 import userMapper from '../dao/userMapper'
+import {reqUtil} from '../util/repUtil'
 import User from '../entity/User'
 //return data to the fond end
-const responseToFont = function (res, ret) {
-  if (typeof ret === undefined) {
-    res.json({
-      code: 1,
-      msg:'操作失败'
-    });
-  } else {
-    res.json(ret);
-  }
-};
 
 export default {
   addUser(req, res, next) {
@@ -33,7 +24,7 @@ export default {
           };
         }
 
-        responseToFont(res, result);
+        reqUtil.responseToFont(res, result);
 
         connection.release();
         });
@@ -47,7 +38,8 @@ export default {
       connection.query(userMapper.queryByName, [username], function (error, results, fields) {
         if (results[0].password === password){
           req.session.user = results[0];
-          res.render('home');
+          let name = req.session.user.username;
+          res.render('home', {username:name, password:password});
         }
       });
       connection.release();
@@ -66,7 +58,7 @@ export default {
             };
           }
 
-          responseToFont(res, result);
+          reqUtil.responseToFont(res, result);
 
           connection.release();
         });
