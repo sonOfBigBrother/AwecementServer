@@ -2,18 +2,34 @@ extends layout
 
 block content
   h1 添加页面
-    form(method='post', action='/msg/addMsg')
+    form(method='post', action='/research/publish')
       div.form-row
         label
           span title:
           input(type='text',name='title')
       div.form-row
         label
-          span content:
-          input(type='text',name='content')
+          span location:
+          input(type='text',name='location')
       div.form-row
         label
           span publisher:
           input(type='text',name='publisher')
+      div.form-row
+        label
+          span receiver:
+          input(type='text',name='receiver')
+      div.form-row
+        label
+          span target:
+          input(type='text',name='target')
+      div.form-row
+        label
+          span startDate:
+          input(type='text',name='start_date')
+      div.form-row
+        label
+          span endDate:
+          input(type='text',name='end_date')
       div.form-row
         input(type='submit')
