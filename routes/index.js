@@ -3,6 +3,7 @@ import login from './login'
 import users from './users'
 import messages from './messages'
 import research from './research'
+import questionnaire from './quest'
 
 export default function (app) {
   app.get('/',function (req, res) {
@@ -20,4 +21,5 @@ export default function (app) {
   app.use('/user',users);
   app.use('/msg',messages);
   app.use('/research',research);
+  app.use('/quest',questionnaire);
 }

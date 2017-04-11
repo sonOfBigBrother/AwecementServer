@@ -4,7 +4,6 @@
 import pool from '../util/sqlUtil'
 import userMapper from '../dao/userMapper'
 import {reqUtil} from '../util/repUtil'
-//return data to the fond end
 
 export default {
   addUser(req, res, next) {
