@@ -64,5 +64,71 @@ export default {
         connection.release();
       });
     })
-  }
+  },
+  queryForReceiver(req, res, next){
+    pool.getConnection(function (err, connection) {
+      connection.query(researchMapper.queryForReceiver, [req.params.receiver], function (err, result) {
+        if (result){
+         console.log(result);
+        }
+        reqUtil.responseToFont(res, result);
+        connection.release();
+      });
+    })
+  },
+  queryAcceptedForReceiver(req, res, next){
+    pool.getConnection(function (err, connection) {
+      connection.query(researchMapper.queryAcceptedForReceiver, [req.params.receiver], function (err, result) {
+        if (result){
+          console.log(result);
+        }
+        reqUtil.responseToFont(res, result);
+        connection.release();
+      });
+    })
+  },
+  queryRefusedForReceiver(req, res, next){
+    pool.getConnection(function (err, connection) {
+      connection.query(researchMapper.queryRefusedForReceiver, [req.params.receiver], function (err, result) {
+        if (result){
+          console.log(result);
+        }
+        reqUtil.responseToFont(res, result);
+        connection.release();
+      });
+    })
+  },
+  queryForPublisher(req, res, next){
+    pool.getConnection(function (err, connection) {
+      connection.query(researchMapper.queryForPublisher, [req.params.publisher], function (err, result) {
+        if (result){
+          console.log(result);
+        }
+        reqUtil.responseToFont(res, result);
+        connection.release();
+      });
+    })
+  },
+  queryAcceptedForPublisher(req, res, next){
+    pool.getConnection(function (err, connection) {
+      connection.query(researchMapper.queryAcceptedForPublisher, [req.params.publisher], function (err, result) {
+        if (result){
+          console.log(result);
+        }
+        reqUtil.responseToFont(res, result);
+        connection.release();
+      });
+    })
+  },
+  queryRefusedForPublisher(req, res, next){
+    pool.getConnection(function (err, connection) {
+      connection.query(researchMapper.queryRefusedForPublisher, [req.params.publisher], function (err, result) {
+        if (result){
+          console.log(result);
+        }
+        reqUtil.responseToFont(res, result);
+        connection.release();
+      });
+    })
+  },
 }
