@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  h1 登录页面
+    body
+      form(method='post', action='/research/receiver/commit', enctype='multipart/form-data')
+        div.form-row
+          label
+            span username:
+            input(type='file',name='fulAvatar')
+        div.form-row
+          label
+            span content:
+            input(type='text',name='content')
+        div.form-row
+          label
+            span receiver:
+            input(type='text',name='receiver')
+        div.form-row
+          input(type='submit')
+
+
+
+
+
+
+

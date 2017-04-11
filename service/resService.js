@@ -4,6 +4,8 @@
 import pool from '../util/sqlUtil'
 import researchMapper from '../dao/researchMapper'
 import {reqUtil} from '../util/repUtil'
+import upload from '../util/upload'
+import fs from 'fs'
 
 export default {
   publish(req, res, next){
@@ -131,4 +133,50 @@ export default {
       });
     })
   },
+  commit(req, res, next){
+    upload.parse(req, function (err, fields, files) {
+      if (err) {
+        res.locals.error = err;
+        res.render('index', { title: 'wtf' });
+        return;
+      }
+
+      let extName = '';  //后缀名
+      switch (files.fulAvatar.type) {
+        case 'image/pjpeg':
+          extName = 'jpg';
+          break;
+        case 'image/jpeg':
+          extName = 'jpg';
+          break;
+        case 'image/png':
+          extName = 'png';
+          break;
+        case 'image/x-png':
+          extName = 'png';
+          break;
+      }
+
+      if(extName.length == 0){
+        res.locals.error = '只支持png和jpg格式图片';
+        res.render('index', { title: 'dfd' });
+        return;
+      }
+
+      let avatarName = Math.random() + '.' + extName;
+      let newPath = upload.uploadDir + avatarName;
+
+      console.log(newPath);
+      fs.renameSync(files.fulAvatar.path, newPath);//重命名
+      pool.getConnection(function (err, connection) {
+        connection.query(researchMapper.commit, [newPath, fields.content, fields.receiver, 1], function (err, result) {
+          if (result){
+            console.log(result);
+          }
+          reqUtil.responseToFont(res, result);
+          connection.release();
+        });
+      })
+    });
+  }
 }

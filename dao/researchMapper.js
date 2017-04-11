@@ -8,7 +8,7 @@ export default {
   accept:'update research set received = 1,received_time = ? where id = ?',
   refuse:'update research set received = -1 where id = ?',
   commit: 'update research set photo = ?, content = ?' +
-  ' where receiver = ?',
+  ' where receiver = ? and id = ?',
   delete: 'update research set del_mark = 1 where id = ?',
   queryForReceiver:'select * from research where received = 0 ' +
   'and del_mark = 0 and receiver = ?' +

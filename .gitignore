@@ -45,3 +45,6 @@ typings.json
 
 # babel dist
 dist
+
+# uploading files
+uploads

@@ -36,4 +36,7 @@ router.get('/publisher/queryAccepted/:publisher', function (req, res, next) {
 router.get('/publisher/queryRefused/:publisher', function (req, res, next) {
   resService.queryRefusedForPublisher(req, res, next);
 });
+router.post('/receiver/commit', function (req, res, next) {
+  resService.commit(req, res, next);
+});
 export default router;

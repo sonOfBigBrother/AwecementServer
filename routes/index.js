@@ -12,7 +12,7 @@ export default function (app) {
       let password = user.password;
       res.render('index',{username:username, password:password});
     } else {
-      res.render('add');
+      res.render('post');
     }
 
    });
