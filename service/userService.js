@@ -4,6 +4,9 @@
 import pool from '../util/sqlUtil'
 import userMapper from '../dao/userMapper'
 import {reqUtil} from '../util/repUtil'
+import cryptoUtil from '../util/cryptoUtil'
+import jwt from 'jsonwebtoken'
+import Constant from '../util/Constant'
 
 export default {
   addUser(req, res, next) {
@@ -30,17 +33,41 @@ export default {
   },
   checkUser(req, res, next) {
     let username = req.body.username;
-    let password = req.body.password;
+    let password = cryptoUtil(req.body.password);
     pool.getConnection(function (err, connection) {
       if (err) throw err;
-      connection.query(userMapper.queryByName, [username], function (error, results, fields) {
-        if (results[0].password === password){
-          req.session.user = results[0];
-          let name = req.session.user.username;
-          res.render('home', {username:name, password:password});
+      connection.query(userMapper.queryByName, [username], function (error, result, fields) {
+        try{
+          if (result[0].password === password){
+            let token = jwt.sign(result[0],Constant.secret, {
+              expiresIn: "2 days"
+            });
+            req.session.user =result[0];
+            result = {
+              code:200,
+              msg:'验证成功',
+              token:token,
+              roleId:req.session.user.role_id,
+              fromWhere:req.session.user.from_where,
+            };
+          } else {
+            result = {
+              code:1,
+              msg:'密码错误'
+            };
+          }
+        } catch (error){
+          result = {
+              code:1,
+              msg:'用户不存在'
+          };
+
         }
+
+        reqUtil.responseToFont(res, result);
+        connection.release();
       });
-      connection.release();
+
     });
   },
   updateUser(req, res, next) {

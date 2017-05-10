@@ -8,25 +8,20 @@ import {reqUtil} from '../util/repUtil'
 export default {
   queryAllForEmployee(req, res, next){
     pool.getConnection(function(err, connection){
-      connection.query(questMapper.queryAllForEmployee, req.body.receiver, function (err, result) {
+      connection.query(questMapper.queryAllForEmployee, req.api_user.username, function (err, result) {
         if (result){
-          console.log(result);
+          reqUtil.responseToFont(res, result);
         }
-
-        reqUtil.responseToFont(res, result);
-
         connection.release();
       });
     })
   },
   queryAllForManInCharge(req, res, next){
     pool.getConnection(function(err, connection){
-      connection.query(questMapper.queryAllForManInCharge, req.body.manInCharge, function (err, result) {
+      connection.query(questMapper.queryAllForManInCharge, req.api_user.username, function (err, result) {
         if (result){
-          console.log(result);
+          reqUtil.responseToFont(res, result);
         }
-
-        reqUtil.responseToFont(res, result);
 
         connection.release();
       });
@@ -34,12 +29,10 @@ export default {
   },
   queryAllForResearcher(req, res, next){
     pool.getConnection(function(err, connection){
-      connection.query(questMapper.queryAllForResearcher, req.body.inviter, function (err, result) {
+      connection.query(questMapper.queryAllForResearcher, req.api_user.username, function (err, result) {
         if (result){
-          console.log(result);
+          reqUtil.responseToFont(res, result);
         }
-
-        reqUtil.responseToFont(res, result);
 
         connection.release();
       });
@@ -48,7 +41,10 @@ export default {
   queryByConditionForEmployee(req, res, next){
     let sql = 'select * from questionnaire ' +
       'where del_mark = 0 and receiver = '
-      + pool.escape(req.body.username);
+      + pool.escape(req.api_user.username);
+    if (req.body.productionCapacity){
+      sql += (' and production_capacity >= ' + pool.escape(req.body.productionCapacity));
+    }
     if (req.body.inviter) {
       sql += (' and inviter = ' + pool.escape(req.body.inviter));
     }
@@ -61,10 +57,8 @@ export default {
     pool.getConnection(function(err, connection){
       connection.query(sql, function (err, result) {
         if (result){
-          console.log(result);
+          reqUtil.responseToFont(res, result);
         }
-
-        reqUtil.responseToFont(res, result);
 
         connection.release();
       });
@@ -73,7 +67,13 @@ export default {
   queryByConditionForResearcher(req, res, next){
     let sql = 'select * from questionnaire ' +
       'where del_mark = 0 and inviter = '
-      + pool.escape(req.body.username);
+      + pool.escape(req.api_user.username);
+    if (req.body.productionCapacity){
+      sql += (' and production_capacity >= ' + pool.escape(req.body.productionCapacity));
+    }
+    if (req.body.province){
+      sql += (' and province = ' + pool.escape(req.body.province));
+    }
     if (req.body.receiver) {
       sql += (' and receiver = ' + pool.escape(req.body.receiver));
     }
@@ -86,10 +86,8 @@ export default {
     pool.getConnection(function(err, connection){
       connection.query(sql, function (err, result) {
         if (result){
-          console.log(result);
+          reqUtil.responseToFont(res, result);
         }
-
-        reqUtil.responseToFont(res, result);
 
         connection.release();
       });
@@ -98,7 +96,13 @@ export default {
   queryByConditionForManInCharge(req, res, next){
     let sql = 'select * from questionnaire join project ' +
       'on questionnaire.project_id = project.id where del_mark = 0 ' +
-      'and man_in_charge = ' + pool.escape(req.body.username);
+      'and man_in_charge = ' + pool.escape(req.api_user.username);
+    if (req.body.productionCapacity){
+      sql += (' and production_capacity >= ' + pool.escape(req.body.productionCapacity));
+    }
+    if (req.body.province){
+      sql += (' and province = ' + pool.escape(req.body.province));
+    }
     if (req.body.inviter) {
       sql += (' and inviter = ' + pool.escape(req.body.inviter));
     }
@@ -114,10 +118,8 @@ export default {
     pool.getConnection(function(err, connection){
       connection.query(sql, function (err, result) {
         if (result){
-          console.log(result);
+          reqUtil.responseToFont(res, result);
         }
-
-        reqUtil.responseToFont(res, result);
 
         connection.release();
       });

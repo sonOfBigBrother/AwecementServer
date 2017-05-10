@@ -6,7 +6,11 @@ block content
       form(method='post', action='/research/receiver/commit', enctype='multipart/form-data')
         div.form-row
           label
-            span username:
+            span file1:
+            input(type='file',name='fulAvatar')
+        div.form-row
+          label
+            span file2:
             input(type='file',name='fulAvatar')
         div.form-row
           label

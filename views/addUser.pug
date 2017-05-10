@@ -1,0 +1,24 @@
+extends layout
+
+block content
+  h1 添加用户
+    form(method='post', action='/user/addUser')
+      div.form-row
+        label
+          span username:
+          input(type='text',name='username')
+      div.form-row
+        label
+          span password:
+          input(type='text',name='password')
+      div.form-row
+        label
+          span roleId:
+          input(type='text',name='roleId')
+      div.form-row
+        label
+          span from:
+          input(type='text',name='fromWhere')
+      div.form-row
+        input(type='submit')
+

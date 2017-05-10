@@ -9,7 +9,7 @@ export default {
   addMsg(req, res, next){
     pool.getConnection(function(err, connection){
       let message = [new Date().toLocaleString(),req.body.title,
-        req.body.content, req.body.publisher, req.body.projectId];
+        req.body.content, req.body.publisher, req.body.projectName];
       connection.query(msgMapper.insert, message, function (err, result) {
         if (result){
           console.log(result);
@@ -44,12 +44,10 @@ export default {
   },
   getMsgForPublisher(req, res, next){
     pool.getConnection(function (err, connection) {
-      let publisher = req.session.user.username;
+      let publisher = req.api_user.username;
       connection.query(msgMapper.getMsgForPublisher, [publisher], function (err, result, fields) {
         if (result) {
-          for (let msg of result) {
-            console.log(msg);
-          }
+          reqUtil.responseToFont(res, result);
         }
         connection.release();
       });
@@ -57,23 +55,19 @@ export default {
   },
   getMsgForEmployee(req, res, next){
     pool.getConnection(function (err, connection) {
-      connection.query(msgMapper.getMsgForEmployee, [req.body.fromWhere], function (err, result, fields) {
+      connection.query(msgMapper.getMsgForEmployee, [req.api_user.from_where], function (err, result, fields) {
         if (result) {
-          for (let msg of result) {
-            console.log(msg);
-          }
+          reqUtil.responseToFont(res, result);
         }
         connection.release();
-      });
+      })
     })
   },
   getMsgForResearcher(req, res, next){
     pool.getConnection(function (err, connection) {
-      connection.query(msgMapper.getMsgForResearcher, [req.body.name], function (err, result, fields) {
+      connection.query(msgMapper.getMsgForResearcher, [req.api_user.from_where], function (err, result, fields) {
         if (result) {
-          for (let msg of result) {
-            console.log(msg);
-          }
+          reqUtil.responseToFont(res, result);
         }
         connection.release();
       });

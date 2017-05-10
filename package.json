@@ -19,7 +19,8 @@
     "morgan": "~1.7.0",
     "serve-favicon": "~2.3.2",
     "mysql": "latest",
-    "formidable":"latest"
+    "formidable":"latest",
+    "jsonwebtoken":"^7.3.0"
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",
