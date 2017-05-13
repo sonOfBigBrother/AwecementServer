@@ -4,6 +4,7 @@
 import pool from '../util/sqlUtil'
 import questMapper from '../dao/questionnaireMapper'
 import {reqUtil} from '../util/repUtil'
+import {removeEscape} from '../util/stringUtil';
 
 export default {
   queryAllForEmployee(req, res, next){
@@ -42,17 +43,25 @@ export default {
     let sql = 'select * from questionnaire ' +
       'where del_mark = 0 and receiver = '
       + pool.escape(req.api_user.username);
-    if (req.body.productionCapacity){
-      sql += (' and production_capacity >= ' + pool.escape(req.body.productionCapacity));
+    let productionCapacity = removeEscape(req.body.productionCapacity);
+    let province = removeEscape(req.body.province);
+    let inviter = removeEscape(req.body.inviter);
+    let creationTime = removeEscape(req.body.creationTime);
+    let submissionTime = removeEscape(req.body.submissionTime);
+    if (productionCapacity){
+      sql += (' and production_capacity >= ' + pool.escape(productionCapacity));
     }
-    if (req.body.inviter) {
-      sql += (' and inviter = ' + pool.escape(req.body.inviter));
+    if (inviter) {
+      sql += (' and inviter = ' + pool.escape(inviter));
     }
-    if (req.body.creationTime){
-      sql += (' and creation_time >= ' + pool.escape(req.body.creationTime));
+    if (creationTime){
+      sql += (' and creation_time >= ' + pool.escape(creationTime));
     }
-    if (req.body.submissionTime){
-      sql += (' and submission_time <= ' + pool.escape(req.body.submissionTime));
+    if (submissionTime){
+      sql += (' and submission_time <= ' + pool.escape(submissionTime));
+    }
+    if (province){
+      sql += (' and province = ' + pool.escape(province));
     }
     pool.getConnection(function(err, connection){
       connection.query(sql, function (err, result) {
@@ -68,20 +77,25 @@ export default {
     let sql = 'select * from questionnaire ' +
       'where del_mark = 0 and inviter = '
       + pool.escape(req.api_user.username);
-    if (req.body.productionCapacity){
-      sql += (' and production_capacity >= ' + pool.escape(req.body.productionCapacity));
+    let productionCapacity = removeEscape(req.body.productionCapacity);
+    let province = removeEscape(req.body.province);
+    let receiver = removeEscape(req.body.receiver);
+    let creationTime = removeEscape(req.body.creationTime);
+    let submissionTime = removeEscape(req.body.submissionTime);
+    if (productionCapacity){
+      sql += (' and production_capacity >= ' + pool.escape(productionCapacity));
     }
-    if (req.body.province){
-      sql += (' and province = ' + pool.escape(req.body.province));
+    if (province){
+      sql += (' and province = ' + pool.escape(province));
     }
-    if (req.body.receiver) {
-      sql += (' and receiver = ' + pool.escape(req.body.receiver));
+    if (receiver) {
+      sql += (' and receiver = ' + pool.escape(receiver));
     }
-    if (req.body.creationTime){
-      sql += (' and creation_time >= ' + pool.escape(req.body.creationTime));
+    if (creationTime){
+      sql += (' and creation_time >= ' + pool.escape(creationTime));
     }
-    if (req.body.submissionTime){
-      sql += (' and submission_time <= ' + pool.escape(req.body.submissionTime));
+    if (submissionTime){
+      sql += (' and submission_time <= ' + pool.escape(submissionTime));
     }
     pool.getConnection(function(err, connection){
       connection.query(sql, function (err, result) {
@@ -94,33 +108,36 @@ export default {
     })
   },
   queryByConditionForManInCharge(req, res, next){
-    let sql = 'select * from questionnaire join project ' +
-      'on questionnaire.project_id = project.id where del_mark = 0 ' +
-      'and man_in_charge = ' + pool.escape(req.api_user.username);
-    if (req.body.productionCapacity){
-      sql += (' and production_capacity >= ' + pool.escape(req.body.productionCapacity));
+    let sql = questMapper.queryForManInCharge + pool.escape(req.api_user.username);
+    let productionCapacity = removeEscape(req.body.productionCapacity);
+    let province = removeEscape(req.body.province);
+    let inviter = removeEscape(req.body.inviter);
+    let receiver = removeEscape(req.body.receiver);
+    let creationTime = removeEscape(req.body.creationTime);
+    let submissionTime = removeEscape(req.body.submissionTime);
+    if (productionCapacity){
+      sql += (' and production_capacity >= ' + pool.escape(productionCapacity));
     }
-    if (req.body.province){
-      sql += (' and province = ' + pool.escape(req.body.province));
+    if (province){
+      sql += (' and province = ' + pool.escape(province));
     }
-    if (req.body.inviter) {
-      sql += (' and inviter = ' + pool.escape(req.body.inviter));
+    if (inviter) {
+      sql += (' and inviter = ' + pool.escape(inviter));
     }
-    if (req.body.receiver) {
-      sql += (' and receiver = ' + pool.escape(req.body.receiver));
+    if (receiver) {
+      sql += (' and receiver = ' + pool.escape(receiver));
     }
-    if (req.body.creationTime){
-      sql += (' and creation_time >= ' + pool.escape(req.body.creationTime));
+    if (creationTime){
+      sql += (' and creation_time >= ' + pool.escape(creationTime));
     }
-    if (req.body.submissionTime){
-      sql += (' and submission_time <= ' + pool.escape(req.body.submissionTime));
+    if (submissionTime){
+      sql += (' and submission_time <= ' + pool.escape(submissionTime));
     }
     pool.getConnection(function(err, connection){
       connection.query(sql, function (err, result) {
         if (result){
           reqUtil.responseToFont(res, result);
         }
-
         connection.release();
       });
     })
